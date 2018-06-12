@@ -81,7 +81,7 @@ public class Config {
 	}
 	
 	public String toString() {
-		return endereco+" : "+porta;
+		return endereco+":"+porta;
 	}
 	
 }

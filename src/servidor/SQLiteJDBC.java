@@ -16,16 +16,17 @@ public class SQLiteJDBC {
 	Connection c = null;
 	Memcached memcached;
 	Config config;
+	String databasePath = "files/trabDB.sqlite";
 	
 	
 	public SQLiteJDBC(Config config) throws Exception {
 		this.config = config;
 		memcached = new Memcached(config.getMemServidor(),config.getMemPorta());
 		Class.forName("org.sqlite.JDBC");
-		if(!Util.fileExists("files/trabDB.sqlite")){
-			throw new Exception("Database file 'trabDB.sqlite' not found");
+		if(!Util.fileExists(databasePath)){
+			throw new Exception("Database file '"+databasePath+"' not found");
 		}
-		c = DriverManager.getConnection("jdbc:sqlite:files/trabDB.sqlite");
+		c = DriverManager.getConnection("jdbc:sqlite:"+databasePath);
 		c.setAutoCommit(false);
 		
 		atualizarListaServidores(true);

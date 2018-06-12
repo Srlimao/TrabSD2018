@@ -1,7 +1,9 @@
 package servidor;
 
 
+import java.awt.Desktop;
 import java.awt.event.*;
+import java.net.URI;
 
 import javax.swing.*;
 
@@ -18,6 +20,8 @@ public class ServerManager {
 		JPanel panel = new JPanel();
 		frame.add(panel);
 		JLabel label;
+		JButton siteLink = new JButton("Abrir Página");
+		
 		try {
 			HttpFileServer.Start();
 			label = new JLabel("Servidor "+ server.toString() +" Online");
@@ -27,9 +31,27 @@ public class ServerManager {
 			label.setHorizontalAlignment(SwingConstants.CENTER); // set the horizontal alignement on the x axis !
 			label.setVerticalAlignment(SwingConstants.CENTER);
 		}
+		siteLink.addActionListener(new ActionListener() {
+
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		    	
+				try {
+					URI uri = new URI("http://"+server.toString()+"/getAvailabeYears");
+					Desktop.getDesktop().browse(uri);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+		    }
+		});
+		
 		
 		panel.add(label);
+		panel.add(siteLink);
+		
     }
+	
 	static class Action1 implements ActionListener {        
 		  public void actionPerformed (ActionEvent e) {     
 		    try {
@@ -43,8 +65,8 @@ public class ServerManager {
 		static class Action2 implements ActionListener {        
 		  public void actionPerformed (ActionEvent e) {     
 		    try {
-				server.Stop();
-			} catch (InterruptedException e1) {
+		    	
+			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
