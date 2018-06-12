@@ -98,10 +98,10 @@ public class SQLiteJDBC {
 		try {
 			if(output == null) {
 				JSONObject json = buscarServidorAno(Integer.parseInt(periodo));
-				String enderecoCliente = json.getString("location").split(":")[0];
-				int portaCliente = Integer.parseInt(json.getString("location").split(":")[1]);
-				if(!enderecoCliente.equals(config.getEndereco()) ) {
-					Cliente client = new Cliente(enderecoCliente,portaCliente);
+				String enderecoServidor = json.getString("location").split(":")[0];
+				int portaServidor = Integer.parseInt(json.getString("location").split(":")[1]);
+				if(!enderecoServidor.equals(config.getEndereco()) ) {
+					Cliente client = new Cliente(enderecoServidor,portaServidor);
 					output = client.GetData(periodo, "", playerName);
 				}else {
 					Statement stmt = null;		
@@ -136,7 +136,7 @@ public class SQLiteJDBC {
 			JSONObject json = buscarServidorAno(Integer.parseInt(periodo));
 			String enderecoServidor = json.getString("location").split(":")[0];
 			int portaServidor = Integer.parseInt(json.getString("location").split(":")[1]);
-			if(enderecoServidor != config.getEndereco() ) {
+			if(!enderecoServidor.equals(config.getEndereco())) {
 				Cliente client = new Cliente(enderecoServidor,portaServidor);
 				output = client.GetData(periodo, clubName, "");
 			}else {
@@ -167,7 +167,7 @@ public class SQLiteJDBC {
 			JSONObject json = buscarServidorAno(Integer.parseInt(periodo));
 			String enderecoServidor = json.getString("location").split(":")[0];
 			int portaServidor = Integer.parseInt(json.getString("location").split(":")[1]);
-			if(enderecoServidor != config.getEndereco()) {
+			if(!enderecoServidor.equals(config.getEndereco())) {
 				Cliente client = new Cliente(enderecoServidor,portaServidor);
 				output = client.GetData(periodo, clubName, playerName);
 			}else {
