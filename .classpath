@@ -2,9 +2,9 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="D:/SoccerSPB/lib/httpcore-4.4.9.jar"/>
-	<classpathentry kind="lib" path="D:/SoccerSPB/lib/json.jar"/>
-	<classpathentry kind="lib" path="D:/SoccerSPB/lib/spymemcached.jar"/>
-	<classpathentry kind="lib" path="D:/SoccerSPB/lib/sqlite-jdbc-3.23.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/wbsilveira/Documents/GitHub/TrabSD2018/lib/httpcore-4.4.9.jar"/>
+	<classpathentry kind="lib" path="C:/Users/wbsilveira/Documents/GitHub/TrabSD2018/lib/json.jar"/>
+	<classpathentry kind="lib" path="C:/Users/wbsilveira/Documents/GitHub/TrabSD2018/lib/spymemcached.jar"/>
+	<classpathentry kind="lib" path="C:/Users/wbsilveira/Documents/GitHub/TrabSD2018/lib/sqlite-jdbc-3.23.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
