@@ -127,9 +127,11 @@ public class HttpFileServer {
               
               if(returnTrataReq[3].equals("Error")){
             	  
-            	  StringEntity entity = new StringEntity("Error");
-            	  response.setStatusCode(HttpStatus.SC_BAD_REQUEST);
-				  response.setEntity(entity);
+            	  ServerException e = new ServerException(2,"Dados Inexistentes");
+            	  StringEntity entity = new StringEntity(e.getJSONString());
+            	  response.setStatusCode(HttpStatus.SC_EXPECTATION_FAILED);
+            	  response.setEntity(entity);
+            	  
               }else{    
             	  try {
             		  
