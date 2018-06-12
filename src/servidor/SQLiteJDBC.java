@@ -2,7 +2,6 @@ package servidor;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -258,7 +257,8 @@ public class SQLiteJDBC {
 			
 			
 		}
-		temp = new ArrayList(new HashSet(temp));
+		HashSet<Integer> set = new HashSet<Integer>(temp);
+		temp = new ArrayList<Integer>(set);
 		Collections.sort(temp);
 		
 		for (Integer i : temp) {

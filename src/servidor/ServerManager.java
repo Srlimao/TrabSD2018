@@ -20,7 +20,7 @@ public class ServerManager {
 		JLabel label;
 		try {
 			HttpFileServer.Start();
-			label = new JLabel("Servidor"+ server.toString() +" Online");
+			label = new JLabel("Servidor "+ server.toString() +" Online");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			label = new JLabel(e.getMessage());
