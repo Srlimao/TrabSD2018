@@ -191,12 +191,18 @@ public class SQLiteJDBC {
 	
 	private String GetMemcached(String periodo, String playerName, String clubName) {
 		String output = "";
+		periodo = periodo.replace(" ", "");
+		playerName = playerName.replace(" ", "+");
+		clubName = clubName.replace(" ", "+");
 		output = memcached.buscarDado("SD_Data_"+periodo+"_"+clubName+"_"+playerName);		
 		return output;
 	}
 	
 	private void SetMemcached(String periodo, String playerName, String clubName, String dados) {
 		String chave = "";
+		periodo = periodo.replace(" ", "");
+		playerName = playerName.replace(" ", "+");
+		clubName = clubName.replace(" ", "+");
 		chave = "SD_Data_"+periodo+"_"+clubName+"_"+playerName;
 		memcached.gravarDado(chave, dados);
 	}
