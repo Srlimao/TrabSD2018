@@ -27,7 +27,7 @@ public class Cliente {
 		this.port = port;
 	}
 	
-    public String GetData(String periodo, String club, String player) throws ServerException {
+    public String GetData(String periodo, String club, String player) throws Exception {
         HttpProcessor httpproc = HttpProcessorBuilder.create()
             .add(new RequestContent())
             .add(new RequestTargetHost())
@@ -50,7 +50,7 @@ public class Cliente {
 						conn.bind(socket);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
-						throw new ServerException(1, "Servidor Indisponível");
+						throw new Exception("Servidor Indisponível");
 					}
                     
                 }
@@ -73,7 +73,7 @@ public class Cliente {
                     monta = EntityUtils.toString(response.getEntity());
                     conn.close();
                 } catch (Exception e) {
-                	throw new ServerException(1, "Servidor Indisponível");
+                	throw new Exception("Servidor Indisponível");
                 }
                 
                 return monta;

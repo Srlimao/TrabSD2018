@@ -32,13 +32,13 @@ public class SQLiteJDBC {
 		atualizarListaServidores(true);
 		
 	}
-	public void close() throws ServerException{
+	public void close() throws Exception{
 		try {
 			c.close();
 			atualizarListaServidores(false);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			throw new ServerException(1, "Servidor Indisponível");
+			throw new Exception("Servidor Indisponível");
 		}
 	}
 	
@@ -101,8 +101,14 @@ public class SQLiteJDBC {
 				String enderecoServidor = json.getString("location").split(":")[0];
 				int portaServidor = Integer.parseInt(json.getString("location").split(":")[1]);
 				if(!enderecoServidor.equals(config.getEndereco()) ) {
-					Cliente client = new Cliente(enderecoServidor,portaServidor);
-					output = client.GetData(periodo, "", playerName);
+					try {
+						Cliente client = new Cliente(enderecoServidor,portaServidor);
+						output = client.GetData(periodo, "", playerName);						
+					}catch(Exception e){
+						desativaServidorExterno(json.getString("location"));
+						throw new Exception("Servidor Indisponível");
+					}
+					
 				}else {
 					Statement stmt = null;		
 					stmt = c.createStatement();
@@ -137,8 +143,15 @@ public class SQLiteJDBC {
 			String enderecoServidor = json.getString("location").split(":")[0];
 			int portaServidor = Integer.parseInt(json.getString("location").split(":")[1]);
 			if(!enderecoServidor.equals(config.getEndereco())) {
-				Cliente client = new Cliente(enderecoServidor,portaServidor);
-				output = client.GetData(periodo, clubName, "");
+				try {
+					Cliente client = new Cliente(enderecoServidor,portaServidor);
+					output = client.GetData(periodo, clubName, "");
+				}catch(Exception e){
+					desativaServidorExterno(json.getString("location"));
+					throw new Exception("Servidor Indisponível");
+				}
+				
+				
 			}else {
 				Statement stmt = null;		
 				stmt = c.createStatement();
@@ -168,8 +181,14 @@ public class SQLiteJDBC {
 			String enderecoServidor = json.getString("location").split(":")[0];
 			int portaServidor = Integer.parseInt(json.getString("location").split(":")[1]);
 			if(!enderecoServidor.equals(config.getEndereco())) {
-				Cliente client = new Cliente(enderecoServidor,portaServidor);
-				output = client.GetData(periodo, clubName, playerName);
+				try {
+					Cliente client = new Cliente(enderecoServidor,portaServidor);
+					output = client.GetData(periodo, clubName, playerName);
+				}catch(Exception e){
+					desativaServidorExterno(json.getString("location"));
+					throw new Exception("Servidor Indisponível");
+				}
+				
 			}else {
 				Statement stmt = null;		
 				stmt = c.createStatement();
@@ -289,6 +308,26 @@ public class SQLiteJDBC {
 		
 		
 	}
+	
+	private void desativaServidorExterno(String location) throws Exception {
+		JSONObject listaServidores = null; 
+		String dado = memcached.buscarDado("SD_ListServers");
+		if(dado == null) {
+			return;
+		}
+		listaServidores = new JSONObject(dado);
+		JSONArray array = listaServidores.getJSONArray("servers");
+		int lenght = array.length();
+		for(int i = 0; i<lenght; i++){
+			if(array.getJSONObject(i).get("location").equals(location)){
+				array.getJSONObject(i).remove("active");
+				array.getJSONObject(i).put("active", false);
+				break;
+			}
+		}
+		memcached.gravarDado("SD_ListServers", listaServidores.toString());
+		
+	}
 
 	
 	private void atualizarListaServidores(boolean isActive) {
@@ -297,6 +336,7 @@ public class SQLiteJDBC {
 		String dado = memcached.buscarDado("SD_ListServers");
 		
 		JSONObject servidor = new JSONObject();
+		
 		
 		try{
 		
