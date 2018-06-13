@@ -14,6 +14,7 @@ public class Memcached {
 	private String endereco;
 	private int porta;
 	private boolean conectado;
+	private boolean alive;
 
 	public Memcached(String endereco, int porta){
 		//Desativa o spam do memcache no log
@@ -33,47 +34,48 @@ public class Memcached {
 
 	public String buscarDado(String chave){
 		if(!conectado){
-			conectar();
+			alive = conectar();
 		}
+		if(alive) {
+			return (String) client.get(chave);
+		}else return null;
 
-		return (String) client.get(chave);		
+				
 	}
 	
 	public void gravarDado(String chave, String dado){
 		if(!conectado){
-			conectar();
+			alive = conectar();
 		}
-		client.set(chave, 0, dado);
+		if(alive) {
+			client.set(chave, 0, dado);
+		}
+		
 		return;
 	}
 	
-	public void gravarDado(String chave, String dado, int expirar){
-		if(!conectado){
-			conectar();
-		}
-		client.set(chave, expirar, dado);
-		return;
-	}
-	
-	public void conectar() {
+	public boolean conectar() {
 		if(conectado){
-			return;
+			return true;
 		}
-
 		try {
-			this.client = new MemcachedClient(new ConnectionFactoryBuilder().setDaemon(true).setFailureMode(FailureMode.Retry).build(), AddrUtil.getAddresses(this.endereco + ":" + this.porta));
-			
-			conectado = true;
-		} catch (IOException e) {
-			e.printStackTrace();
+			//this.client = new MemcachedClient(new ConnectionFactoryBuilder().setDaemon(true).setFailureMode(FailureMode.Cancel).build(), AddrUtil.getAddresses(this.endereco + ":" + this.porta));
+			this.client = new MemcachedClient(AddrUtil.getAddresses(this.endereco + ":" + this.porta));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			return conectado=false;
 		}
+		return conectado = this.client.isAlive();
 	}
 	
 	public void desconectar() {
 		if(!conectado){
 			return;
 		}
-		this.client.shutdown();
+		if(alive) {
+			this.client.shutdown();
+		}
+		
 		conectado = false;
 	}
 }

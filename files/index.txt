@@ -1,0 +1,3 @@
+create index if not exists ano_player 		on Players 	(Ano,player_name);
+create index if not exists ano_team			on Times	(Ano,team_long_name);
+create index if not exists ano_team_player	on Players	(Ano,team_long_name,player_name);

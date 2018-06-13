@@ -57,8 +57,10 @@ public class SQLiteJDBC {
 			}else {
 				output = GetDados(periodo,playerName,clubName, isPretty);
 			}
-		} catch (Exception e) {
-			throw new ServerException(1, e.getMessage());
+		}catch(ServerException e1) {
+			throw e1;
+		}catch (Exception e) {
+			throw new ServerException(0, e.getMessage());
 		}
 		return output;
 	}
@@ -112,7 +114,7 @@ public class SQLiteJDBC {
 				}else {
 					Statement stmt = null;		
 					stmt = c.createStatement();
-					ResultSet rs = stmt.executeQuery( "SELECT SUM(Wins) Wins,SUM(Losses) Losses FROM Players WHERE Ano = '"+periodo+"' AND player_name like '%"+playerName+"%';" );
+					ResultSet rs = stmt.executeQuery( "SELECT SUM(Wins) Wins,SUM(Losses) Losses FROM Players WHERE Ano = '"+periodo+"' AND player_name like '"+playerName+"%';" );
 					while ( rs.next() ) {
 						if(rs.getInt(1) == 0 && rs.getInt(2)==0) {
 							throw new Exception("Dados Inexistentes");
@@ -155,7 +157,7 @@ public class SQLiteJDBC {
 			}else {
 				Statement stmt = null;		
 				stmt = c.createStatement();
-				ResultSet rs = stmt.executeQuery( "SELECT SUM(Wins),SUM(Losses) FROM Times WHERE Ano = '"+periodo+"' AND team_long_name like '%"+clubName+"%';" );
+				ResultSet rs = stmt.executeQuery( "SELECT SUM(Wins),SUM(Losses) FROM Times WHERE Ano = '"+periodo+"' AND team_long_name like '"+clubName+"%';" );
 				while ( rs.next() ) {
 					if(rs.getInt(1) == 0 && rs.getInt(2)==0) {
 						throw new Exception("Dados Inexistentes");
@@ -192,7 +194,7 @@ public class SQLiteJDBC {
 			}else {
 				Statement stmt = null;		
 				stmt = c.createStatement();
-				ResultSet rs = stmt.executeQuery( "SELECT SUM(Wins),SUM(Losses) FROM Players WHERE Ano = '"+periodo+"' AND team_long_name like '%"+clubName+"%'  AND player_name like '%"+playerName+"%';" );
+				ResultSet rs = stmt.executeQuery( "SELECT SUM(Wins),SUM(Losses) FROM Players WHERE Ano = '"+periodo+"' AND team_long_name like '"+clubName+"%'  AND player_name like '"+playerName+"%';" );
 				while ( rs.next() ) {
 					if(rs.getInt(1) == 0 && rs.getInt(2)==0) {
 						throw new Exception("Dados Inexistentes");
@@ -208,7 +210,7 @@ public class SQLiteJDBC {
 		return output;
 	}
 	
-	private String GetMemcached(String periodo, String playerName, String clubName) {
+	private String GetMemcached(String periodo, String playerName, String clubName)throws Exception {
 		String output = "";
 		periodo = periodo.replace(" ", "");
 		playerName = playerName.replace(" ", "+");
@@ -217,7 +219,7 @@ public class SQLiteJDBC {
 		return output;
 	}
 	
-	private void SetMemcached(String periodo, String playerName, String clubName, String dados) {
+	private void SetMemcached(String periodo, String playerName, String clubName, String dados) throws Exception{
 		String chave = "";
 		periodo = periodo.replace(" ", "");
 		playerName = playerName.replace(" ", "+");
@@ -330,44 +332,36 @@ public class SQLiteJDBC {
 	}
 
 	
-	private void atualizarListaServidores(boolean isActive) {
+	private void atualizarListaServidores(boolean isActive) throws Exception{
 
 		JSONObject listaServidores = null; 
 		String dado = memcached.buscarDado("SD_ListServers");
 		
 		JSONObject servidor = new JSONObject();
+		servidor.put("name", config.getNome());
+		servidor.put("location", config.getEndereco() + ":" + config.getPorta());
+		servidor.put("year", config.getAnos());
+		servidor.put("active",isActive);
 		
-		
-		try{
-		
-			servidor.put("name", config.getNome());
-			servidor.put("location", config.getEndereco() + ":" + config.getPorta());
-			servidor.put("year", config.getAnos());
-			servidor.put("active",isActive);
+		if(dado == null) {
+			listaServidores = new JSONObject();
 			
-			if(dado == null) {
-				listaServidores = new JSONObject();
-				
-			} else {
-				listaServidores = new JSONObject(dado);
-				JSONArray array = listaServidores.getJSONArray("servers");
-				int lenght = array.length();
-				for(int i = 0; i<lenght; i++){
-					if(array.getJSONObject(i).get("name").equals(config.getNome())){
-						array.remove(i);
-						break;
-					}
+		} else {
+			listaServidores = new JSONObject(dado);
+			JSONArray array = listaServidores.getJSONArray("servers");
+			int lenght = array.length();
+			for(int i = 0; i<lenght; i++){
+				if(array.getJSONObject(i).get("name").equals(config.getNome())){
+					array.remove(i);
+					break;
 				}
-				listaServidores.remove("servers");
-				listaServidores.put("servers", array);
-				
 			}
-			listaServidores.append("servers", servidor);
+			listaServidores.remove("servers");
+			listaServidores.put("servers", array);
 			
-			memcached.gravarDado("SD_ListServers", listaServidores.toString());
-
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+		listaServidores.append("servers", servidor);
+		
+		memcached.gravarDado("SD_ListServers", listaServidores.toString());
 	}
 }
