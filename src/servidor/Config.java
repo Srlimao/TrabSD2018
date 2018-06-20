@@ -15,7 +15,7 @@ public class Config {
 
 	public Config() throws Exception{
 
-		JSONObject jsonConfig = new JSONObject(Util.fileToString("files/config.json"));
+		JSONObject jsonConfig = new JSONObject(Util.fileToString("onfig.json"));
 
 		setNome(jsonConfig.getString("serverName"));
 		setPorta(jsonConfig.getInt("portListen"));

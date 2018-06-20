@@ -16,7 +16,7 @@ public class SQLiteJDBC {
 	Connection c = null;
 	Memcached memcached;
 	Config config;
-	String databasePath = "files/trabDB.sqlite";
+	String databasePath = "trabDB.sqlite";
 	
 	
 	public SQLiteJDBC(Config config) throws Exception {
@@ -114,7 +114,7 @@ public class SQLiteJDBC {
 				}else {
 					Statement stmt = null;		
 					stmt = c.createStatement();
-					ResultSet rs = stmt.executeQuery( "SELECT SUM(Wins) Wins,SUM(Losses) Losses FROM Players WHERE Ano = '"+periodo+"' AND player_name like '"+playerName+"%';" );
+					ResultSet rs = stmt.executeQuery( "SELECT SUM(Wins) Wins,SUM(Losses) Losses FROM Players WHERE Ano = '"+periodo+"' AND player_name = '"+playerName+"';" );
 					while ( rs.next() ) {
 						if(rs.getInt(1) == 0 && rs.getInt(2)==0) {
 							throw new Exception("Dados Inexistentes");
@@ -157,7 +157,7 @@ public class SQLiteJDBC {
 			}else {
 				Statement stmt = null;		
 				stmt = c.createStatement();
-				ResultSet rs = stmt.executeQuery( "SELECT SUM(Wins),SUM(Losses) FROM Times WHERE Ano = '"+periodo+"' AND team_long_name like '"+clubName+"%';" );
+				ResultSet rs = stmt.executeQuery( "SELECT SUM(Wins),SUM(Losses) FROM Times WHERE Ano = '"+periodo+"' AND team_long_name = '"+clubName+"';" );
 				while ( rs.next() ) {
 					if(rs.getInt(1) == 0 && rs.getInt(2)==0) {
 						throw new Exception("Dados Inexistentes");
@@ -194,7 +194,7 @@ public class SQLiteJDBC {
 			}else {
 				Statement stmt = null;		
 				stmt = c.createStatement();
-				ResultSet rs = stmt.executeQuery( "SELECT SUM(Wins),SUM(Losses) FROM Players WHERE Ano = '"+periodo+"' AND team_long_name like '"+clubName+"%'  AND player_name like '"+playerName+"%';" );
+				ResultSet rs = stmt.executeQuery( "SELECT SUM(Wins),SUM(Losses) FROM Players WHERE Ano = '"+periodo+"' AND team_long_name = '"+clubName+"'  AND player_name = '"+playerName+"';" );
 				while ( rs.next() ) {
 					if(rs.getInt(1) == 0 && rs.getInt(2)==0) {
 						throw new Exception("Dados Inexistentes");
