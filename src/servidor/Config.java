@@ -1,21 +1,19 @@
 package servidor;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 
 public class Config {
 	
-	private String nome;
-	private String endereco;
-	private int porta;
-	private String memServidor;
-	private int memPorta;
-	private int[] anos;
+	private String serverName;
+	private String serverIP;
+	private int portListen;
+	private String memcachedServer;
+	private int memcachedPort;
+	private int[] yearData;
 
 	public Config() throws Exception{
-
-		JSONObject jsonConfig = new JSONObject(Util.fileToString("files/config.json"));
+		JSONObject jsonConfig = new JSONObject(Util.fileToString("config.json"));
 
 		setNome(jsonConfig.getString("serverName"));
 		setPorta(jsonConfig.getInt("portListen"));
@@ -26,62 +24,62 @@ public class Config {
 
 		JSONArray array = jsonConfig.getJSONArray("yearData");
 		int arrCount = array.length();
-		anos = new int[arrCount];
+		yearData = new int[arrCount];
 		for(int i=0;i<arrCount;i++){
-			this.anos[i] = array.getInt(i);
+			this.yearData[i] = array.getInt(i);
 		}
 	}
 
 	public String getNome() {
-		return nome;
+		return serverName;
 	}
 
 	public void setNome(String nome) {
-		this.nome = nome;
+		this.serverName = nome;
 	}
 
 	public int getPorta() {
-		return porta;
+		return portListen;
 	}
 
 	public void setPorta(int porta) {
-		this.porta = porta;
+		this.portListen = porta;
 	}
 
 	public String getMemServidor() {
-		return memServidor;
+		return memcachedServer;
 	}
 
 	public void setMemServidor(String memServidor) {
-		this.memServidor = memServidor;
+		this.memcachedServer = memServidor;
 	}
 
 	public int getMemPorta() {
-		return memPorta;
+		return memcachedPort;
 	}
 
 	public void setMemPorta(int memPorta) {
-		this.memPorta = memPorta;
+		this.memcachedPort = memPorta;
 	}
 
 	public int[] getAnos() {
-		return anos;
+		return yearData;
 	}
 
 	public void setAnos(int[] anos) {
-		this.anos = anos;
+		this.yearData = anos;
 	}
 
 	public String getEndereco() {
-		return endereco;
+		return serverIP;
 	}
 
 	public void setEndereco(String endereco) {
-		this.endereco = endereco;
+		this.serverIP = endereco;
 	}
 	
 	public String toString() {
-		return endereco+":"+porta;
+		return serverIP+":"+portListen;
 	}
 	
 }

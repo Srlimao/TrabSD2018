@@ -23,7 +23,8 @@ import org.apache.http.protocol.HttpRequestHandler;
 import org.apache.http.ssl.SSLContexts;
 
 public class HttpFileServer {
-
+	
+	static String configFile;
 	static Config config;
 	static SQLiteJDBC gerenciador;
 	HttpServer server ;

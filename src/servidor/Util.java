@@ -80,4 +80,13 @@ public class Util {
 		    return true;
 		}else return false;
 	}
+	
+	public static void saveLog(String log, String path) throws ServerException{
+		try {
+			base64ToFile(log,path);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw new ServerException(0,e.getMessage());
+		}
+	}
 }

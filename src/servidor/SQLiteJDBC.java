@@ -1,5 +1,4 @@
 package servidor;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,7 +15,7 @@ public class SQLiteJDBC {
 	Connection c = null;
 	Memcached memcached;
 	Config config;
-	String databasePath = "files/trabDB.sqlite";
+	String databasePath = "trabDB.sqlite";
 	
 	
 	public SQLiteJDBC(Config config) throws Exception {
@@ -114,7 +113,7 @@ public class SQLiteJDBC {
 				}else {
 					Statement stmt = null;		
 					stmt = c.createStatement();
-					ResultSet rs = stmt.executeQuery( "SELECT SUM(Wins) Wins,SUM(Losses) Losses FROM Players WHERE Ano = '"+periodo+"' AND player_name like '"+playerName+"%';" );
+					ResultSet rs = stmt.executeQuery( "SELECT SUM(Wins) Wins,SUM(Losses) Losses FROM Players WHERE Ano = '"+periodo+"' AND player_name = '"+playerName+"';" );
 					while ( rs.next() ) {
 						if(rs.getInt(1) == 0 && rs.getInt(2)==0) {
 							throw new Exception("Dados Inexistentes");
@@ -150,14 +149,14 @@ public class SQLiteJDBC {
 					output = client.GetData(periodo, clubName, "");
 				}catch(Exception e){
 					desativaServidorExterno(json.getString("location"));
-					throw new Exception("Servidor Indisponível");
+					throw new Exception("Servidor Indisponível - location: "+enderecoServidor+":"+portaServidor);
 				}
 				
 				
 			}else {
 				Statement stmt = null;		
 				stmt = c.createStatement();
-				ResultSet rs = stmt.executeQuery( "SELECT SUM(Wins),SUM(Losses) FROM Times WHERE Ano = '"+periodo+"' AND team_long_name like '"+clubName+"%';" );
+				ResultSet rs = stmt.executeQuery( "SELECT SUM(Wins),SUM(Losses) FROM Times WHERE Ano = '"+periodo+"' AND team_long_name = '"+clubName+"';" );
 				while ( rs.next() ) {
 					if(rs.getInt(1) == 0 && rs.getInt(2)==0) {
 						throw new Exception("Dados Inexistentes");
@@ -194,7 +193,7 @@ public class SQLiteJDBC {
 			}else {
 				Statement stmt = null;		
 				stmt = c.createStatement();
-				ResultSet rs = stmt.executeQuery( "SELECT SUM(Wins),SUM(Losses) FROM Players WHERE Ano = '"+periodo+"' AND team_long_name like '"+clubName+"%'  AND player_name like '"+playerName+"%';" );
+				ResultSet rs = stmt.executeQuery( "SELECT SUM(Wins),SUM(Losses) FROM Players WHERE Ano = '"+periodo+"' AND team_long_name = '"+clubName+"'  AND player_name = '"+playerName+"';" );
 				while ( rs.next() ) {
 					if(rs.getInt(1) == 0 && rs.getInt(2)==0) {
 						throw new Exception("Dados Inexistentes");
@@ -324,19 +323,19 @@ public class SQLiteJDBC {
 			if(array.getJSONObject(i).get("location").equals(location)){
 				array.getJSONObject(i).remove("active");
 				array.getJSONObject(i).put("active", false);
+				memcached.gravarDado("SD_ListServers", listaServidores.toString());
 				break;
 			}
 		}
-		memcached.gravarDado("SD_ListServers", listaServidores.toString());
+		
 		
 	}
 
 	
 	private void atualizarListaServidores(boolean isActive) throws Exception{
-
-		JSONObject listaServidores = null; 
-		String dado = memcached.buscarDado("SD_ListServers");
 		
+		String dado = memcached.buscarDado("SD_ListServers");
+		JSONObject listaServidores = null;
 		JSONObject servidor = new JSONObject();
 		servidor.put("name", config.getNome());
 		servidor.put("location", config.getEndereco() + ":" + config.getPorta());

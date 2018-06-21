@@ -27,6 +27,7 @@ public class ServerManager {
 			label = new JLabel("Servidor "+ server.toString() +" Online");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
 			label = new JLabel(e.getMessage());
 			label.setHorizontalAlignment(SwingConstants.CENTER); // set the horizontal alignement on the x axis !
 			label.setVerticalAlignment(SwingConstants.CENTER);
