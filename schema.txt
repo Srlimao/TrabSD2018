@@ -1,0 +1,13 @@
+CREATE TABLE Players(
+  "Ano" TEXT,
+  "team_long_name" TEXT,
+  "player_name" TEXT,
+  "Wins" TEXT,
+  "Losses" TEXT
+);
+CREATE TABLE Times(
+  "Ano" TEXT,
+  "team_long_name" TEXT,
+  "Wins" TEXT,
+  "Losses" TEXT
+);
