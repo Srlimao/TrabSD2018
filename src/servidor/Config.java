@@ -13,12 +13,7 @@ public class Config {
 	private int[] yearData;
 
 	public Config() throws Exception{
-<<<<<<< HEAD
 		JSONObject jsonConfig = new JSONObject(Util.fileToString("config.json"));
-=======
-
-		JSONObject jsonConfig = new JSONObject(Util.fileToString("onfig.json"));
->>>>>>> 0ac53c8f4bbf03487b1c3d56aff42f0a92bd1a08
 
 		setNome(jsonConfig.getString("serverName"));
 		setPorta(jsonConfig.getInt("portListen"));

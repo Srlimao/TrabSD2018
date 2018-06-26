@@ -1,0 +1,6 @@
+Agora que ja extraiu os arquivos vamos configurar o servidor
+1.Ajuste o arquivo config.json na pasta files
+2.Coloque o arquivo de dados original na pasta principal
+3.Execute o programa DBLoader.jar na pasta principal e espere a finalização do processo(quando a janela fechar)
+4.Mova o novo arquivo de dados 'trabDB.sqlite' para a pasta 'files'
+5.Na pasta principal execute o 'script.bat'

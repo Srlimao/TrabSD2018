@@ -15,7 +15,7 @@ public class SQLiteJDBC {
 	Connection c = null;
 	Memcached memcached;
 	Config config;
-	String databasePath = "trabDB.sqlite";
+	String databasePath = "databaseSD_new.sqlite";
 	
 	
 	public SQLiteJDBC(Config config) throws Exception {
