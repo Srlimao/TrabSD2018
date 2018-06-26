@@ -1,10 +1,10 @@
-#TesteMemcached
+#SoccerSPB
 
 Projeto de Sistemas Distribuidos utilizando bigdata de Jogos de Football europeu
 
 Utiliza as seguintes bibliotecas:
 
-httpcore-4.4.9 - Biblioteca para requests http -
+httpcore-4.4.9 - Biblioteca para requests http
 spymemcached - Biblioteca cliente para o Memcached Server
 JSON simple - Biblioteca de Json
 sqlite-jdbc - Biblioteca para controlar o arquivo de dados
