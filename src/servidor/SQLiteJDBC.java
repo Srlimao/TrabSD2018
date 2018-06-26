@@ -77,7 +77,7 @@ public class SQLiteJDBC {
 			ResultSet rs = stmt.executeQuery( "SELECT SUM(Wins), SUM(Losses) FROM Times WHERE Ano = '"+periodo+"';" );
 			while ( rs.next() ) {
 				if(rs.getInt(1) == 0 && rs.getInt(2)==0) {
-					throw new Exception("Dados Inexistentes");
+					throw new ServerException(2,"Dados Inexistentes");
 				}
 				output = returnJSON(rs.getInt(1),rs.getInt(2),isPretty);
 				
@@ -105,9 +105,12 @@ public class SQLiteJDBC {
 					try {
 						Cliente client = new Cliente(enderecoServidor,portaServidor);
 						output = client.GetData(periodo, "", playerName);						
+					}catch(ServerException e){
+						desativaServidorExterno(json.getString("location"));
+						throw new ServerException(1,"Servidor Indisponível - location: "+enderecoServidor+":"+portaServidor);
 					}catch(Exception e){
 						desativaServidorExterno(json.getString("location"));
-						throw new Exception("Servidor Indisponível");
+						throw new Exception(e.getMessage());
 					}
 					
 				}else {
@@ -116,7 +119,7 @@ public class SQLiteJDBC {
 					ResultSet rs = stmt.executeQuery( "SELECT SUM(Wins) Wins,SUM(Losses) Losses FROM Players WHERE Ano = '"+periodo+"' AND player_name = '"+playerName+"';" );
 					while ( rs.next() ) {
 						if(rs.getInt(1) == 0 && rs.getInt(2)==0) {
-							throw new Exception("Dados Inexistentes");
+							throw new ServerException(2,"Dados Inexistentes");
 						}
 						output = returnJSON(rs.getInt(1),rs.getInt(2),isPretty);				
 				      }
@@ -127,6 +130,8 @@ public class SQLiteJDBC {
 				
 				
 			}
+		}catch(ServerException e) {
+			throw e;
 		}catch(Exception e) {
 			throw new Exception(e.getMessage());
 		}
@@ -147,9 +152,12 @@ public class SQLiteJDBC {
 				try {
 					Cliente client = new Cliente(enderecoServidor,portaServidor);
 					output = client.GetData(periodo, clubName, "");
+				}catch(ServerException e){
+					desativaServidorExterno(json.getString("location"));
+					throw new ServerException(1,"Servidor Indisponível - location: "+enderecoServidor+":"+portaServidor);
 				}catch(Exception e){
 					desativaServidorExterno(json.getString("location"));
-					throw new Exception("Servidor Indisponível - location: "+enderecoServidor+":"+portaServidor);
+					throw new Exception(e.getMessage());
 				}
 				
 				
@@ -159,7 +167,7 @@ public class SQLiteJDBC {
 				ResultSet rs = stmt.executeQuery( "SELECT SUM(Wins),SUM(Losses) FROM Times WHERE Ano = '"+periodo+"' AND team_long_name = '"+clubName+"';" );
 				while ( rs.next() ) {
 					if(rs.getInt(1) == 0 && rs.getInt(2)==0) {
-						throw new Exception("Dados Inexistentes");
+						throw new ServerException(2,"Dados Inexistentes");
 					}
 					output = returnJSON(rs.getInt(1),rs.getInt(2),isPretty);		
 			      }		
@@ -185,9 +193,12 @@ public class SQLiteJDBC {
 				try {
 					Cliente client = new Cliente(enderecoServidor,portaServidor);
 					output = client.GetData(periodo, clubName, playerName);
+				}catch(ServerException e){
+					desativaServidorExterno(json.getString("location"));
+					throw new ServerException(1,"Servidor Indisponível - location: "+enderecoServidor+":"+portaServidor);
 				}catch(Exception e){
 					desativaServidorExterno(json.getString("location"));
-					throw new Exception("Servidor Indisponível");
+					throw new Exception(e.getMessage());
 				}
 				
 			}else {
@@ -196,7 +207,7 @@ public class SQLiteJDBC {
 				ResultSet rs = stmt.executeQuery( "SELECT SUM(Wins),SUM(Losses) FROM Players WHERE Ano = '"+periodo+"' AND team_long_name = '"+clubName+"'  AND player_name = '"+playerName+"';" );
 				while ( rs.next() ) {
 					if(rs.getInt(1) == 0 && rs.getInt(2)==0) {
-						throw new Exception("Dados Inexistentes");
+						throw new ServerException(2,"Dados Inexistentes");
 					}
 					output = returnJSON(rs.getInt(1),rs.getInt(2),isPretty);
 			      }		
